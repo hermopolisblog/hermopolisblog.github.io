@@ -6,38 +6,97 @@
         <title>Hermopolis</title>
         <link rel="stylesheet" href="style.css">
   </head>
+
+
   <body>
-        <div class="header">
-            <nav>
-                <img src="images/frame.png">
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="login.html">Log In/Create Account</a></li>
-                    <li><a href="myaccount.html">My Account</a></li>
-                    <li><a href="upload.html">Upload Post</a></li>
-                </ul>
-            </nav>
-            <div class="text-box">
-                <h1>Log In/Create Account</h1>
-                <p>You can log in with your username and password or you can create a new account.
-                   </p>
-                <a href="index.html">Home</a>
-            </div>
-            <div class="form-container">
-                
-            <h2>Log In</h2>
-            <form>
-                <input type="text" placeholder="Username" required>
-                <input type="password" placeholder="Password" required>
-                <button type="submit">Log In</button>
-            </form>
-
-            <p>Don’t have an account? <a href="#">Create one</a></p>
-            </div>
-
-            <div class="user-box">
-                <img src="images/frame.png">
-            </div>
+    <div class="header">
+        <nav>
+            <img src="images/frame.png">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Log In/Create Account</a></li>
+                <li><a href="myaccount.html">My Account</a></li>
+                <li><a href="upload.html">Upload Post</a></li>
+            </ul>
+        </nav>
+        <div class="text-box">
+            <h1>Log In/Create Account</h1>
+            <p>You can log in with your username and password or you can create a new account.
+                </p>
+            <a href="index.html">Home</a>
         </div>
+        <div class="form-container">
+            
+        <h2>Log In</h2>
+        <form>
+            <input type="text" placeholder="Username" required>
+            <input type="password" placeholder="Password" required>
+            <button type="submit">Log In</button>
+        </form>
+
+        <p>Don’t have an account? <a href="#">Create one</a></p>
+        </div>
+
+        <div class="user-box">
+            <img src="images/frame.png">
+        </div>
+    </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAIJDrL-kpcNdSHjUSRwml7YxtucR33zYQ",
+    authDomain: "hermopolis-c85db.firebaseapp.com",
+    projectId: "hermopolis-c85db",
+    storageBucket: "hermopolis-c85db.appspot.com",
+    messagingSenderId: "858097853709",
+    appId: "1:858097853709:web:9e3bd4c3e100bf72a8bc44",
+    measurementId: "G-M08CTGD010"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.querySelector("form");
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const userName = loginForm.querySelector('input[placeholder="Username"]').value;
+      const passWord = loginForm.querySelector('input[placeholder="Password"]').value;
+
+      console.log('username is ', userName)
+      console.log('password is ', passWord)
+
+      const usersRef = collection(db, "accounts");
+      //const q = query(usersRef, where("username", "==", userName));
+      const q = query(usersRef, where("username", "==", "nikki"));
+      // const q = query(usersRef, where("thepassword", "==", userName));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        // alert("User not found!");
+        alert("USER nottt found!");
+        return;
+      }
+
+      const userDoc = querySnapshot.docs[0].data();
+
+      // if (userDoc.password === passWord) {
+      // if (userDoc.password === "thepassword") {
+      if (true) {
+        alert("Logged in successfully!");
+        window.location.href = "myaccount.html";
+      } else {
+        alert("Incorrect password");
+      }
+    });
+  });
+</script>
+
+
   </body>
   </html>
